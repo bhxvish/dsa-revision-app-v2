@@ -65,9 +65,11 @@ export async function createProblemsBulk(entries) {
 
 // entries: [{ title, url, category, pattern, order, checked }] — from the
 // NeetCode 150 setup screen, first run or re-run. Existing problems are
-// matched by title and only have status/nextReviewDate/needsTriage touched;
-// everything else (recognition notes, plans, code, pattern edits) is left
-// exactly as it was. New titles are created fresh with the seed's metadata.
+// matched by title and only have status/nextReviewDate/needsTriage touched
+// (plus `order` backfilled if it was missing, so the list-order sort works
+// uniformly); everything else (recognition notes, plans, code, pattern
+// edits) is left exactly as it was. New titles are created fresh with the
+// seed's metadata.
 export async function applySeedSelections(entries) {
   const items = loadAll();
   const byTitle = new Map(items.map((p) => [p.title.toLowerCase(), p]));
@@ -78,6 +80,9 @@ export async function applySeedSelections(entries) {
     if (existing) {
       existing.status = null;
       existing.nextReviewDate = null;
+      if (existing.order === undefined) {
+        existing.order = entry.order;
+      }
       if (entry.checked) {
         delete existing.needsTriage;
       } else {
