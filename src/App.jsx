@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { NavLink, Route, Routes } from 'react-router-dom';
 import DashboardPage from './pages/DashboardPage';
 import ProblemListPage from './pages/ProblemListPage';
@@ -9,7 +10,10 @@ import PatternLibraryPage from './pages/PatternLibraryPage';
 import NotesPage from './pages/NotesPage';
 import MockLogPage from './pages/MockLogPage';
 import AnalyticsPage from './pages/AnalyticsPage';
+import SettingsPage from './pages/SettingsPage';
+import SetupPage from './pages/SetupPage';
 import ThemeToggle from './components/ThemeToggle';
+import { listProblems } from './data/repositories/problemsRepository';
 import './App.css';
 
 const NAV_ITEMS = [
@@ -22,9 +26,34 @@ const NAV_ITEMS = [
   { to: '/notes', label: 'Notes' },
   { to: '/mock-log', label: 'Mock Log' },
   { to: '/analytics', label: 'Analytics' },
+  { to: '/settings', label: 'Settings' },
 ];
 
 export default function App() {
+  const [checkingSetup, setCheckingSetup] = useState(true);
+  const [needsSetup, setNeedsSetup] = useState(false);
+
+  useEffect(() => {
+    listProblems().then((problems) => {
+      setNeedsSetup(problems.length === 0);
+      setCheckingSetup(false);
+    });
+  }, []);
+
+  if (checkingSetup) {
+    return null;
+  }
+
+  if (needsSetup) {
+    return (
+      <div className="app-shell">
+        <main className="main-content">
+          <SetupPage mode="first-launch" onComplete={() => setNeedsSetup(false)} />
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="app-shell">
       <nav className="navbar">
@@ -56,6 +85,7 @@ export default function App() {
           <Route path="/notes" element={<NotesPage />} />
           <Route path="/mock-log" element={<MockLogPage />} />
           <Route path="/analytics" element={<AnalyticsPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
         </Routes>
       </main>
     </div>

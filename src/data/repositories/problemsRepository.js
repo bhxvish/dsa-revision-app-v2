@@ -27,6 +27,9 @@ function makeProblem(input) {
     codeText: input.codeText || '',
     timesReviewed: 0,
     createdAt: new Date().toISOString(),
+    // Optional, only present when relevant — see scheduling.isDue.
+    ...(input.order !== undefined ? { order: input.order } : {}),
+    ...(input.needsTriage === false ? { needsTriage: false } : {}),
   };
 }
 
@@ -58,6 +61,44 @@ export async function createProblemsBulk(entries) {
   items.push(...created);
   persist(items);
   return created;
+}
+
+// entries: [{ title, url, category, pattern, order, checked }] — from the
+// NeetCode 150 setup screen, first run or re-run. Existing problems are
+// matched by title and only have status/nextReviewDate/needsTriage touched;
+// everything else (recognition notes, plans, code, pattern edits) is left
+// exactly as it was. New titles are created fresh with the seed's metadata.
+export async function applySeedSelections(entries) {
+  const items = loadAll();
+  const byTitle = new Map(items.map((p) => [p.title.toLowerCase(), p]));
+
+  entries.forEach((entry) => {
+    const key = entry.title.toLowerCase();
+    const existing = byTitle.get(key);
+    if (existing) {
+      existing.status = null;
+      existing.nextReviewDate = null;
+      if (entry.checked) {
+        delete existing.needsTriage;
+      } else {
+        existing.needsTriage = false;
+      }
+    } else {
+      const created = makeProblem({
+        title: entry.title,
+        url: entry.url,
+        neetcodeCategory: entry.category,
+        patterns: entry.pattern ? [entry.pattern] : [],
+        order: entry.order,
+        needsTriage: entry.checked ? undefined : false,
+      });
+      items.push(created);
+      byTitle.set(key, created);
+    }
+  });
+
+  persist(items);
+  return items;
 }
 
 export async function updateProblem(id, patch) {

@@ -22,8 +22,14 @@ export function computeNextReviewDate(status, fromDate = new Date()) {
   return toLocalISODate(next);
 }
 
+// A problem with no nextReviewDate counts as due immediately (brand-new /
+// untracked problems, e.g. from bulk triage) UNLESS it's explicitly marked
+// needsTriage: false — used for problems seeded as "not yet attempted" (see
+// the NeetCode 150 setup screen), which should only surface via new-problem
+// practice, not the review queue.
 export function isDue(problem, today = todayISO()) {
-  return !problem.nextReviewDate || problem.nextReviewDate <= today;
+  if (problem.nextReviewDate) return problem.nextReviewDate <= today;
+  return problem.needsTriage !== false;
 }
 
 // Unset-status problems (never reviewed) sort first, then red, yellow, green.

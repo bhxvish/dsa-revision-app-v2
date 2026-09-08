@@ -74,8 +74,11 @@ export default function ProblemListPage() {
         const dateCompare = (a.nextReviewDate || '').localeCompare(b.nextReviewDate || '');
         if (dateCompare !== 0) return dateCompare;
         // Among ties (mainly untracked problems, which all share a null date),
-        // surface the weakest-pattern ones first.
-        return getWeaknessRank(patternScores, a.patterns) - getWeaknessRank(patternScores, b.patterns);
+        // surface the weakest-pattern ones first, then fall back to NeetCode's
+        // list order (problems without one, e.g. manually added, sort last).
+        const weaknessCompare = getWeaknessRank(patternScores, a.patterns) - getWeaknessRank(patternScores, b.patterns);
+        if (weaknessCompare !== 0) return weaknessCompare;
+        return (a.order ?? Infinity) - (b.order ?? Infinity);
       });
   }, [problems, statusFilter, patternFilter, search, patternScores]);
 

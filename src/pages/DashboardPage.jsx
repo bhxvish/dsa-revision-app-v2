@@ -5,7 +5,7 @@ import { listMockSessions } from '../data/repositories/mockSessionsRepository';
 import { getRedQueueProgress } from '../data/repositories/redQueueRepository';
 import { getSettings, updateSettings } from '../data/repositories/settingsRepository';
 import { getTodayHours, setTodayHours } from '../data/repositories/timeBudgetRepository';
-import { getDueProblems, todayISO } from '../data/scheduling';
+import { getDueProblems, isDue, todayISO } from '../data/scheduling';
 import { computePatternScores, getWeaknessRank } from '../data/analytics';
 import { computeSplit, formatMinutes } from '../data/timeBudget';
 
@@ -68,7 +68,10 @@ export default function DashboardPage() {
   const patternScores = computePatternScores(problems, sessions);
   const weakest = patternScores.slice(0, 3);
 
-  const unratedProblems = problems.filter((p) => !p.status);
+  // Exclude anything already sitting in the due/triage queue — a problem
+  // marked "already solved" during NeetCode 150 setup (or bulk-triaged) is
+  // due for Quick Recall, not a "new problem" suggestion.
+  const unratedProblems = problems.filter((p) => !p.status && !isDue(p));
   const suggested = [...unratedProblems].sort(
     (a, b) => getWeaknessRank(patternScores, a.patterns) - getWeaknessRank(patternScores, b.patterns)
   )[0];
