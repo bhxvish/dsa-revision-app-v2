@@ -1,0 +1,153 @@
+:root {
+  --text: #3f3f46;
+  --text-h: #18181b;
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --border: #e4e4e7;
+  --accent: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-bg: rgba(79, 70, 229, 0.12);
+  --accent-soft-bg: #eef2ff;
+  --accent-soft-bg-hover: #e0e7ff;
+  --accent-soft-border: #c7d2fe;
+  --overlay: rgba(0, 0, 0, 0.35);
+  --shadow: rgba(0, 0, 0, 0.08);
+
+  /* Single source of truth for green/yellow/red status coloring — referenced
+     from constants/status.js (inline styles) and directly in App.css. */
+  --status-red: #b91c1c;
+  --status-red-bg: #fee2e2;
+  --status-red-border: #fca5a5;
+  --status-yellow: #a16207;
+  --status-yellow-bg: #fef9c3;
+  --status-yellow-border: #fde047;
+  --status-green: #15803d;
+  --status-green-bg: #dcfce7;
+  --status-green-border: #86efac;
+  --status-unrated: #52525b;
+  --status-unrated-bg: #f4f4f5;
+  --status-unrated-border: #d4d4d8;
+  --danger: var(--status-red);
+
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 14px/1.5 var(--sans);
+  color-scheme: light;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dark palette — applied when the OS prefers dark and the user hasn't
+   explicitly chosen light, or whenever the user has explicitly chosen dark
+   (data-theme, toggled from the navbar and persisted in localStorage). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --text: #a1a1aa;
+    --text-h: #f4f4f5;
+    --bg: #0c0c0e;
+    --surface: #18181b;
+    --border: #2e2e33;
+    --accent: #818cf8;
+    --accent-hover: #a5b4fc;
+    --accent-bg: rgba(129, 140, 248, 0.18);
+    --accent-soft-bg: rgba(129, 140, 248, 0.14);
+    --accent-soft-bg-hover: rgba(129, 140, 248, 0.22);
+    --accent-soft-border: rgba(129, 140, 248, 0.4);
+    --overlay: rgba(0, 0, 0, 0.6);
+    --shadow: rgba(0, 0, 0, 0.4);
+
+    --status-red: #f87171;
+    --status-red-bg: rgba(248, 113, 113, 0.16);
+    --status-red-border: rgba(248, 113, 113, 0.4);
+    --status-yellow: #fbbf24;
+    --status-yellow-bg: rgba(251, 191, 36, 0.16);
+    --status-yellow-border: rgba(251, 191, 36, 0.4);
+    --status-green: #4ade80;
+    --status-green-bg: rgba(74, 222, 128, 0.16);
+    --status-green-border: rgba(74, 222, 128, 0.4);
+    --status-unrated: #a1a1aa;
+    --status-unrated-bg: rgba(161, 161, 170, 0.14);
+    --status-unrated-border: rgba(161, 161, 170, 0.35);
+
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --text: #a1a1aa;
+  --text-h: #f4f4f5;
+  --bg: #0c0c0e;
+  --surface: #18181b;
+  --border: #2e2e33;
+  --accent: #818cf8;
+  --accent-hover: #a5b4fc;
+  --accent-bg: rgba(129, 140, 248, 0.18);
+  --accent-soft-bg: rgba(129, 140, 248, 0.14);
+  --accent-soft-bg-hover: rgba(129, 140, 248, 0.22);
+  --accent-soft-border: rgba(129, 140, 248, 0.4);
+  --overlay: rgba(0, 0, 0, 0.6);
+  --shadow: rgba(0, 0, 0, 0.4);
+
+  --status-red: #f87171;
+  --status-red-bg: rgba(248, 113, 113, 0.16);
+  --status-red-border: rgba(248, 113, 113, 0.4);
+  --status-yellow: #fbbf24;
+  --status-yellow-bg: rgba(251, 191, 36, 0.16);
+  --status-yellow-border: rgba(251, 191, 36, 0.4);
+  --status-green: #4ade80;
+  --status-green-bg: rgba(74, 222, 128, 0.16);
+  --status-green-border: rgba(74, 222, 128, 0.4);
+  --status-unrated: #a1a1aa;
+  --status-unrated-bg: rgba(161, 161, 170, 0.14);
+  --status-unrated-border: rgba(161, 161, 170, 0.35);
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  background: var(--bg);
+}
+
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-h);
+  margin: 0;
+}
+
+h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-h);
+  margin: 0 0 16px;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+input,
+select,
+textarea {
+  font: inherit;
+  background: var(--surface);
+  color: var(--text-h);
+}
