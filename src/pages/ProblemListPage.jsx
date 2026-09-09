@@ -8,7 +8,7 @@ import {
 } from '../data/repositories/problemsRepository';
 import { listPatterns, addPattern } from '../data/repositories/patternsRepository';
 import { listMockSessions } from '../data/repositories/mockSessionsRepository';
-import { isDue } from '../data/scheduling';
+import { getDueProblems } from '../data/scheduling';
 import { computePatternScores, getWeaknessRank } from '../data/analytics';
 import StatusBadge from '../components/StatusBadge';
 import ProblemFormModal from '../components/ProblemFormModal';
@@ -57,7 +57,7 @@ export default function ProblemListPage() {
     refresh();
   }
 
-  const dueCount = useMemo(() => problems.filter((p) => isDue(p)).length, [problems]);
+  const dueCount = useMemo(() => getDueProblems(problems).length, [problems]);
 
   const patternScores = useMemo(() => computePatternScores(problems, mockSessions), [problems, mockSessions]);
 

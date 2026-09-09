@@ -5,7 +5,7 @@ import { listMockSessions } from '../data/repositories/mockSessionsRepository';
 import { getRedQueueProgress } from '../data/repositories/redQueueRepository';
 import { getSettings, updateSettings } from '../data/repositories/settingsRepository';
 import { getTodayHours, setTodayHours } from '../data/repositories/timeBudgetRepository';
-import { getDueProblems, isDue, todayISO } from '../data/scheduling';
+import { getDueProblems, getRedBacklog, isDue, todayISO } from '../data/scheduling';
 import { computePatternScores, getWeaknessRank } from '../data/analytics';
 import { computeSplit, formatMinutes } from '../data/timeBudget';
 
@@ -61,6 +61,7 @@ export default function DashboardPage() {
   }
 
   const dueCount = getDueProblems(problems).length;
+  const practiceQueueCount = getRedBacklog(problems).length;
 
   const redQuota = settings.redsPerDay + redProgress.extraAllowed;
   const redClearedCount = redProgress.clearedIds.length;
@@ -146,6 +147,10 @@ export default function DashboardPage() {
           <Link to="/recall" className="snapshot-card">
             <span className="snapshot-count">{dueCount}</span>
             <span className="snapshot-label">due for review</span>
+          </Link>
+          <Link to="/red-queue" className="snapshot-card">
+            <span className="snapshot-count">{practiceQueueCount}</span>
+            <span className="snapshot-label">in practice queue</span>
           </Link>
           <Link to="/red-queue" className="snapshot-card">
             <span className="snapshot-count">

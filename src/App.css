@@ -1109,7 +1109,7 @@
 
 .snapshot-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 2fr;
+  grid-template-columns: 1fr 1fr 1fr 2fr;
   gap: 12px;
   margin-bottom: 16px;
 }

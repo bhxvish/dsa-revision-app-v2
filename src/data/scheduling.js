@@ -32,13 +32,18 @@ export function isDue(problem, today = todayISO()) {
   return problem.needsTriage !== false;
 }
 
-// Unset-status problems (never reviewed) sort first, then red, yellow, green.
+// Unset-status problems (never reviewed) sort first, then yellow, green.
 // Within a bucket, oldest nextReviewDate first (null sorts first via '' < any date string).
-const STATUS_BUCKET = { red: 1, yellow: 2, green: 3 };
+const STATUS_BUCKET = { yellow: 1, green: 2 };
 
+// Due problems for Quick Recall Check specifically — excludes reds. A red
+// means "no clue," so a 2-minute recall check can only ever produce "Blank":
+// it just reschedules for tomorrow and repeats forever. Reds get a real
+// re-learning pass through the Practice Queue instead (see getRedBacklog),
+// and rejoin this rotation automatically once re-rated yellow or green.
 export function getDueProblems(problems, today = todayISO()) {
   return problems
-    .filter((p) => isDue(p, today))
+    .filter((p) => p.status !== 'red' && isDue(p, today))
     .sort((a, b) => {
       const bucketA = STATUS_BUCKET[a.status] ?? 0;
       const bucketB = STATUS_BUCKET[b.status] ?? 0;
