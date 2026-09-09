@@ -6,6 +6,7 @@ const DEFAULTS = {
   redsPerDay: 3,
   struggleTimerMinutes: 25,
   timeSplit: { newProblems: 60, redQueue: 25, dueReviews: 15 },
+  redQueueIncludeYellows: false,
 };
 
 function load() {

@@ -53,3 +53,12 @@ export function getRedBacklog(problems) {
     .filter((p) => p.status === 'red')
     .sort((a, b) => (a.nextReviewDate || '').localeCompare(b.nextReviewDate || ''));
 }
+
+// Every yellow problem, most overdue first. Used by the Red Queue's optional
+// "include yellows" filter — reds still sort ahead since callers list
+// getRedBacklog() before this.
+export function getYellowBacklog(problems) {
+  return problems
+    .filter((p) => p.status === 'yellow')
+    .sort((a, b) => (a.nextReviewDate || '').localeCompare(b.nextReviewDate || ''));
+}

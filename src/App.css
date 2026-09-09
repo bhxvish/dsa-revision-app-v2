@@ -1344,3 +1344,33 @@ a.snapshot-card:hover {
 .settings-import-label {
   cursor: pointer;
 }
+
+/* Quick Recall Check: practice-now banner */
+.recall-practice-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--accent-soft-bg);
+  border: 1px solid var(--accent-soft-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--text-h);
+}
+
+/* Red Queue header controls */
+.redq-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.redq-yellow-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text);
+}
